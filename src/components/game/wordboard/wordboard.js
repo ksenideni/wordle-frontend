@@ -1,35 +1,24 @@
 import React from 'react';
+import {useSelector, useDispatch} from 'react-redux'
 import Wordline from '../wordline/wordline';
 
+export default function Wordboard() {
 
-export default class Wordboard extends React.Component {
+    let words = useSelector(state => state.wordleGame.words)
 
-    COLOR_GREEN = 'green';
-
-    words = [
-        { word: 'qwerty', colors: [this.COLOR_GREEN, 'grey', 'red', 'grey', 'yellow'] },
-        { word: 'qwerty', colors: ['grey', 'red', 'red', 'grey', 'yellow'] },
-        { word: 'qwerty', colors: ['yellow', 'green', 'red', 'grey', 'red'] },
-    ]
-
-    render() {
-        console.log('Wordboard');
-        var attempts = [];
-        for (let i = 0; i < this.words.length; i++) {
-            console.log(this.words.length)
-            attempts.push(
-                <Wordline
-                    key={i}
-                    wordColors={this.words[i].colors}
-                    word={this.words[i].word}
-                />
-            )
-        }
-        return (
-            // <Wordboard className='wordboard'>
-            <div>
-                {attempts}
-            </div>
-        );
+    const attempts = [];
+    for (let i = 0; i < words.length; i++) {
+        attempts.push(
+            <Wordline
+                key={i}
+                wordColors={words[i].colors}
+                word={words[i].word}
+            />
+        )
     }
+    return (
+        <div>
+            {attempts}
+        </div>
+    );
 }

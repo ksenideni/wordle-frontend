@@ -18,7 +18,6 @@ export default class Wordline extends React.Component {
             )
         }
         return (
-            // <div className='wordline'>
             <div>
                 {wordline}
             </div>

@@ -1,25 +1,27 @@
 import {createSlice} from "@reduxjs/toolkit";
 import AttemptService from "../service/AttemptService";
 
+const attemptService = new AttemptService();
+
 export const wordleSlice = createSlice({
-    attemptService: new AttemptService(),
-    name: "wordlePlay",
+
+    name: "wordleReducer",
     initialState: {
-        chatId: null,
-        userId: null,
-        words: null
+        chatId: 1,
+        userId: 2,
+        words: attemptService.getAttempts(1, 2)
     },
     reducers: {
         get: state => {
             state.words = attemptService.getAttempts(state.chatId, state.userId);
         },
-        post: state => {
-            state.words = state.words.push(attemptService.postAttempt());
+        post: (state, action) => {
+            state.words = state.words.push(attemptService.postAttempt(state.chatId, state.userId, action.payload));
         }
     }
 });
 
 // Action creators are generated for each case reducer function
-export const {get, post, incrementByAmount} = wordleSlice.actions
+export const {get, post} = wordleSlice.actions
 
 export default wordleSlice.reducer

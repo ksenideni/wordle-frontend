@@ -1,8 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit'
-import {wordleReducer} from "../reducers/wordleSlice";
+import {wordleSlice} from "../reducers/wordleSlice";
 
 export default configureStore({
     reducer: {
-        wordleGame: wordleReducer,
+        wordleGame: wordleSlice.reducer,
     }
 })
