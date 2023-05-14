@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux'
 import Wordline from '../wordline/wordline';
 import {COLOR_WHITE, MAX_NUMBER_OF_ATTEMPTS} from "../../../constants/constants";
-import styles from './wordboard.css';
+import styles from './wordboard.module.css';
 
 export default function Wordboard() {
 
@@ -20,7 +20,7 @@ export default function Wordboard() {
 
     //заполнение не тронутых попыток
     for (let i = 0; i < MAX_NUMBER_OF_ATTEMPTS - words.length - 1; i++) {
-        attempts.push(renderWordline(attempts.length, bufferColors, '-----'));
+        attempts.push(renderWordline(attempts.length, bufferColors, ''));
     }
 
     return (

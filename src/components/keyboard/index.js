@@ -3,6 +3,7 @@ import Key from './key';
 import {useDispatch, useSelector} from "react-redux";
 import {addToBuffer, deleteFromBuffer, post} from "../../reducers/wordleSlice";
 import {COLOR_WHITE} from "../../constants/constants";
+import styles from './keyboard.module.css';
 
 
 export default function KeyBoard() {
@@ -14,7 +15,7 @@ export default function KeyBoard() {
 
     const charColorMap = createCharColorMap(words);
 
-    const doRenderKey = renderKeyFactory(charColorMap);
+    // const doRenderKey = renderKeyFactory(charColorMap);
     const doCollectArrayOfKey = collectArrayOfKeyFactory(charColorMap);
 
 
@@ -26,17 +27,18 @@ export default function KeyBoard() {
     const rowArray1 = doCollectArrayOfKey(row1, buffer, dispatch);
     const rowArray2 = doCollectArrayOfKey(row2, buffer, dispatch);
     const rowArray3 = doCollectArrayOfKey(row3, buffer, dispatch);
-    rowArray3.push(doRenderKey(rowArray3.length, 'Enter', enterOnClickFunc(buffer, dispatch)));
-    rowArray3.unshift(doRenderKey(-1, 'Delete', deleteOnClickFunc(dispatch)))
+    rowArray3.push(renderColorKey(rowArray3.length, 'Enter', 'specialKey', enterOnClickFunc(buffer, dispatch)));
+
+    rowArray3.unshift(renderColorKey(-1, 'Delete', 'specialKey', deleteOnClickFunc(dispatch)))
     return (
-        <div>
-            <div className="keyboard-row">
+        <div className={styles.keyboardContainer}>
+            <div className={styles.keyboardRow}>
                 {rowArray1}
             </div>
-            <div className="keyboard-row">
+            <div className={styles.keyboardRow}>
                 {rowArray2}
             </div>
-            <div className="keyboard-row">
+            <div className={styles.keyboardRow}>
                 {rowArray3}
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Letter from '../letter/letter';
+import styles from './wordline.module.css'
 
 
 export default class Wordline extends React.Component {
@@ -9,7 +10,7 @@ export default class Wordline extends React.Component {
         var chars = this.props.word;
         var wordline = [];
         for (let i = 0; i < 5; i++) {
-            let char = '-';
+            let char = '';
             if (i < chars.length) {
                 char = chars[i]
             }
@@ -22,7 +23,7 @@ export default class Wordline extends React.Component {
             )
         }
         return (
-            <div>
+            <div className={styles.wordline}>
                 {wordline}
             </div>
         );
