@@ -9,9 +9,16 @@ export const wordleSlice = createSlice({
     initialState: {
         chatId: 1,
         userId: 2,
-        words: attemptService.getAttempts(1, 2)
+        words: attemptService.getAttempts(1, 2),
+        buffer: ''
     },
     reducers: {
+        deleteFromBuffer: (state, action) => {
+            state.buffer -= action.payload;
+        },
+        addToBuffer: (state, action) => {
+            state.buffer += action.payload;
+        },
         get: state => {
             state.words = attemptService.getAttempts(state.chatId, state.userId);
         },
@@ -22,6 +29,6 @@ export const wordleSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {get, post} = wordleSlice.actions
+export const {addToBuffer, get, post} = wordleSlice.actions
 
 export default wordleSlice.reducer

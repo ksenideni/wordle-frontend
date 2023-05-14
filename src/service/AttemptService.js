@@ -11,16 +11,13 @@ export default class AttemptService {
     mockAttempt = {word: 'atemp', colors: ['yellow', 'green', 'red', 'grey', 'red']};
 
     getAttempts(chatId, userId) {
-        console.log('in AttemptService.getAttempts')
-        console.log('in AttemptService.getAttempts' + chatId)
-        console.log('in AttemptService.getAttempts' + userId)
         return this.mockWords;
     }
 
     postAttempt(chatId, userId, word) {
-        console.log(word);
+        console.log("posting:" + word);
+        this.mockAttempt.word = word;
         return this.mockAttempt;
-
     }
 
 }
