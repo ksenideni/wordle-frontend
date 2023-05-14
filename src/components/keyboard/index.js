@@ -1,49 +1,115 @@
 import React from 'react';
 import Key from './key';
+import {useDispatch, useSelector} from "react-redux";
+import {addToBuffer, deleteFromBuffer, post} from "../../reducers/wordleSlice";
+import {COLOR_WHITE} from "../../constants/constants";
 
 
-export default class KeyBoard extends React.Component {
+export default function KeyBoard() {
 
-    row1 = 'qwertyuiop';
-    row2 = 'asdfghjkl';
-    row3 = 'zxcvbnm';
+    // const [buffer, words] = useSelector((state) => [state.wordleGame.buffer, state.wordleGame.words]);
+    const buffer = useSelector(state => state.wordleGame.buffer);
+    const words = useSelector(state => state.wordleGame.words);
+    const dispatch = useDispatch();
 
-    renderKey(char, key, onClickFunc) {
-        return (
-            <Key
-                onClick={onClickFunc}
-                key={key}
-                char={char}
-            />
-        );
-    }
+    const charColorMap = createCharColorMap(words);
 
-    render() {
-        const rowArray1 = this.collectArrayOfKey(this.row1);
-        const rowArray2 = this.collectArrayOfKey(this.row2);
-        const rowArray3 = this.collectArrayOfKey(this.row3);
-        rowArray3.push(this.renderKey('Enter', rowArray3.length))
-        rowArray3.unshift(this.renderKey('Delete', -1))
-        return (
-            <div>
-                <div className="keyboard-row">
-                    {rowArray1}
-                </div>
-                <div className="keyboard-row">
-                    {rowArray2}
-                </div>
-                <div className="keyboard-row">
-                    {rowArray3}
-                </div>
+    const doRenderKey = renderKeyFactory(charColorMap);
+    const doCollectArrayOfKey = collectArrayOfKeyFactory(charColorMap);
+
+
+    const row1 = 'qwertyuiop';
+    const row2 = 'asdfghjkl';
+    const row3 = 'zxcvbnm';
+
+
+    const rowArray1 = doCollectArrayOfKey(row1, buffer, dispatch);
+    const rowArray2 = doCollectArrayOfKey(row2, buffer, dispatch);
+    const rowArray3 = doCollectArrayOfKey(row3, buffer, dispatch);
+    rowArray3.push(doRenderKey(rowArray3.length, 'Enter', enterOnClickFunc(buffer, dispatch)));
+    rowArray3.unshift(doRenderKey(-1, 'Delete', deleteOnClickFunc(dispatch)))
+    return (
+        <div>
+            <div className="keyboard-row">
+                {rowArray1}
             </div>
-        );
-    }
+            <div className="keyboard-row">
+                {rowArray2}
+            </div>
+            <div className="keyboard-row">
+                {rowArray3}
+            </div>
+        </div>
+    );
 
-    collectArrayOfKey(row) {
+}
+
+
+function renderKeyFactory(charColorMap) {
+    return (key, char, onClickFunc) => {
+        if (charColorMap.has(char)) {
+            return renderColorKey(key, char, charColorMap.get(char), onClickFunc);
+        }
+        return renderColorKey(key, char, COLOR_WHITE, onClickFunc);
+    }
+}
+
+function renderColorKey(key, char, color, onClickFunc) {
+    return (
+        <Key
+            key={key}
+            char={char}
+            color={color}
+            onClick={onClickFunc}
+        />
+    );
+}
+
+//----------------on click functions----------------on
+function collectArrayOfKeyFactory(charColorMap) {
+    const doRenderKey = renderKeyFactory(charColorMap);
+    return (row, buffer, dispatch) => {
         const rowArray = [];
         for (let i in row) {
-            rowArray.push(this.renderKey(row[i], rowArray.length));
+            const char = row[i];
+            rowArray.push(doRenderKey(rowArray.length, char, printOnClickFunc(char, buffer, dispatch)));
         }
         return rowArray;
     }
+}
+
+function printOnClickFunc(a, buffer, dispatch) {
+    return () => {
+        if (buffer.length < 5) {
+            dispatch(addToBuffer(a));
+        } else {
+            console.log('buffer is full')
+        }
+    };
+}
+
+function enterOnClickFunc(buffer, dispatch) {
+    return () => {
+        dispatch(post(buffer));
+    }
+}
+
+function deleteOnClickFunc(dispatch) {
+    return () => dispatch(deleteFromBuffer());
+}
+
+//----------------buildMap func----------------on
+
+function createCharColorMap(words) {
+    const map = new Map();
+    for (let i = 0; i < words.length; i++) {
+        const currentWord = words[i].word;
+        const currentColors = words[i].colors;
+        for (let j = 0; j < currentWord.length; j++) {
+            if (!map.has(currentWord[j])) {
+                map.set(currentWord[j], currentColors[j]);
+            }
+        }
+    }
+    return map;
 }

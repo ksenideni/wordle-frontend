@@ -1,22 +1,20 @@
+import {COLOR_GREEN, COLOR_GREY, COLOR_YELLOW} from "../constants/constants";
+
 export default class AttemptService {
 
-    COLOR_GREEN = 'green';
-
     mockWords = [
-        {word: 'qwerty', colors: [this.COLOR_GREEN, 'grey', 'red', 'grey', 'yellow']},
-        {word: 'dfqpu', colors: ['grey', 'red', 'red', 'grey', 'yellow']},
-        {word: 'xfgty', colors: ['yellow', 'green', 'red', 'grey', 'red']},
+        {word: 'qwert', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_YELLOW]},
+        {word: 'qasdf', colors: [COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY, COLOR_GREEN]},
     ];
 
-    mockAttempt = {word: 'atemp', colors: ['yellow', 'green', 'red', 'grey', 'red']};
+    mockAttempt = {word: 'atemp', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY]};
 
     getAttempts(chatId, userId) {
         return this.mockWords;
     }
 
     postAttempt(chatId, userId, word) {
-        console.log("posting:" + word);
-        this.mockAttempt.word = word;
+        this.mockAttempt = {...this.mockAttempt, word}
         return this.mockAttempt;
     }
 

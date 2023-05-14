@@ -1,53 +1,55 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import Wordline from '../wordline/wordline';
+import {COLOR_WHITE, MAX_NUMBER_OF_ATTEMPTS} from "../../../constants/constants";
+import styles from './wordboard.css';
 
 export default function Wordboard() {
-
-    const NUMBER_OF_ATTEMPTS = 5;
 
     let words = useSelector(state => state.wordleGame.words);
     let buffer = useSelector(state => state.wordleGame.buffer);
 
-    const attempts = [];
-    for (let i = 0; i < words.length; i++) {
-        attempts.push(
-            <Wordline
-                key={i}
-                wordColors={words[i].colors}
-                word={words[i].word}
-            />
-        )
+    const attempts = createEnteredAttemptList(words);
+
+    let bufferColors = createBufferColors();
+
+    //заполнение борды текущей попыткой
+    if (words.length < 5) {
+        attempts.push(renderWordline(attempts.length, bufferColors, buffer));
     }
 
-    let bufferColors = [];
-    for (let i = 0; i < 5; i++) {
-        bufferColors.push('grey');
-    }
-    attempts.push(
-        <Wordline
-            key={attempts.length}
-            wordColors={bufferColors}
-            word={buffer}
-        />
-    );
-
-    for (let i = 0; i < NUMBER_OF_ATTEMPTS - words.length - 1; i++) {
-        attempts.push(<Wordline
-                key={attempts.length}
-                wordColors={bufferColors}
-                word={'-----'}
-            />
-        );
+    //заполнение не тронутых попыток
+    for (let i = 0; i < MAX_NUMBER_OF_ATTEMPTS - words.length - 1; i++) {
+        attempts.push(renderWordline(attempts.length, bufferColors, '-----'));
     }
 
     return (
-        <div>
+        <div className={styles.gameBoardContainer}>
             {attempts}
         </div>
     );
 }
 
-function emptyAttempts(i) {
+function createEnteredAttemptList(words) {
+    let attempts = [];
+    for (let i = 0; i < words.length; i++) {
+        attempts.push(renderWordline(i, words[i].colors, words[i].word));
+    }
+    return attempts;
+}
 
+function renderWordline(key, colors, word) {
+    return (<Wordline
+        key={key}
+        wordColors={colors}
+        word={word}
+    />);
+}
+
+function createBufferColors() {
+    const bufferColors = [];
+    for (let i = 0; i < 5; i++) {
+        bufferColors.push(COLOR_WHITE);
+    }
+    return bufferColors;
 }

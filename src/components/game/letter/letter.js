@@ -1,13 +1,11 @@
 import React from 'react';
-import './letter.css';
+import letterStyles from './letter.module.css';
 
 
-export default class Letter extends React.Component {
-    render() {
-        return (
-            <span className={this.props.color}>
-                {this.props.char}
-            </span>
-        );
-    }
+export default function Letter(props) {
+    return (
+        <span className={letterStyles[props.color]}>
+                {props.char}
+        </span>
+    );
 }
