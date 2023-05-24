@@ -1,41 +1,9 @@
 import {COLOR_GREEN, COLOR_GREY, COLOR_YELLOW} from "../constants/constants";
 import axios from "axios";
-// import axios from "axios";
 
 export default class AttemptService {
-    // host = process.env.WORDLE_BACKEND_HOST
-    prefixURL = 'http://localhost:8080/wordle/attempts'
-
-    // mockAnswer = {
-    //     "won": false,
-    //     "tries": [
-    //         {
-    //             "letters": [
-    //                 {
-    //                     "character": "q",
-    //                     "color": "GREY"
-    //                 },
-    //                 {
-    //                     "character": "w",
-    //                     "color": "GREY"
-    //                 },
-    //                 {
-    //                     "character": "e",
-    //                     "color": "YELLOW"
-    //                 },
-    //                 {
-    //                     "character": "r",
-    //                     "color": "YELLOW"
-    //                 },
-    //                 {
-    //                     "character": "t",
-    //                     "color": "GREY"
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
-
+    host = process.env.WORDLE_BACKEND_HOST
+    prefixURL = this.host + '/wordle/attempts'
     mockWords = [
         {word: 'qwert', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_YELLOW]},
         {word: 'qasdf', colors: [COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY, COLOR_GREEN]},
@@ -43,16 +11,13 @@ export default class AttemptService {
 
     mockAttempt = {word: 'atemp', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY]};
 
-    getAttempts() {
-        console.log("sdsdsdsdsd")
+    async getAttempts(stateSetter) {
         const currentURLString = window.location.href;
         const currentURL = new URL(currentURLString);
         const chatId = currentURL.searchParams.get('chat_id')
         const userId = currentURL.searchParams.get('user_id')
-        console.log(['chatId ', chatId])
-        console.log(['userId ', userId])
 
-        axios.get(
+        await axios.get(
             this.prefixURL,
             {
                 params: {
@@ -61,8 +26,10 @@ export default class AttemptService {
                 },
             })
             .then(function (response) {
-                console.log(['response.data ', response.data])
-                return adapterResponse(response.data)
+                let resp = adapterResponse(response)
+                console.log('resp')
+                console.log(resp)
+                stateSetter(resp)
             })
             .catch(function (error) {
                 console.log(error)
@@ -78,63 +45,23 @@ export default class AttemptService {
         this.mockWords.push(this.mockAttempt)
         return this.mockWords
     }
-
-// {
-//     "won": false,
-//     "tries": [
-//         {
-//             "letters": [
-//                 {
-//                     "character": "q",
-//                     "color": "GREY"
-//                 },
-//                 {
-//                     "character": "w",
-//                     "color": "GREY"
-//                 },
-//                 {
-//                     "character": "e",
-//                     "color": "YELLOW"
-//                 },
-//                 {
-//                     "character": "r",
-//                     "color": "YELLOW"
-//                 },
-//                 {
-//                     "character": "t",
-//                     "color": "GREY"
-//                 }
-//             ]
-//         }
-//     ]
-// }
-
-    // mockWords = [
-    //     {word: 'qwert', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_YELLOW]},
-    //     {word: 'qasdf', colors: [COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY, COLOR_GREEN]},
-    // ];
-
-
 }
 
 function adapterResponse(response) {
     let words = []
-    let tries = response.tries
+    let tries = response.data.tries
     for (let i in tries) {
-        let word = tries[i]
-        words.push(adapterWord(word))
+        words.push(adapterWord(tries[i].letters))
     }
-    console.log(['adapterResponse:', words])
     return words;
 }
 
 function adapterWord(colorLettersInWord) {
-
     let word = ''
     let colors = []
-    for (let letter in colorLettersInWord) {
-        word += letter.character
-        colors.push(letter.color)
+    for (let i in colorLettersInWord) {
+        word += colorLettersInWord[i].character
+        colors.push('COLOR_' + colorLettersInWord[i].color)
     }
     return {word, colors}
 }

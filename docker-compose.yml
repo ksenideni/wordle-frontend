@@ -6,4 +6,4 @@ services:
     build:
        context: .
       args:
-        WORDLE_BACKEND_HOST: WORDLE_BACKEND_HOST
+        WORDLE_BACKEND_HOST: http://localhost:8080

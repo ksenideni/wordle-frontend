@@ -19,8 +19,9 @@ export const wordleSlice = createSlice({
             state.buffer += action.payload;
         },
         get: state => {
-            state.words = attemptService.getAttempts();
-
+            attemptService.getAttempts((attempts) => {
+                state.words = attempts
+            });
         },
         post: (state, action) => {
             if (action.payload.length === 5 && state.words.length < 5) {
