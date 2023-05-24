@@ -32,6 +32,7 @@ export default function Wordboard() {
 
 function createEnteredAttemptList(words) {
     let attempts = [];
+    console.log(['createEnteredAttemptList', words])
     for (let i = 0; i < words.length; i++) {
         attempts.push(renderWordline(i, words[i].colors, words[i].word));
     }

@@ -3,13 +3,12 @@ import AttemptService from "../service/AttemptService";
 
 const attemptService = new AttemptService();
 
+
 export const wordleSlice = createSlice({
 
     name: "wordleReducer",
     initialState: {
-        chatId: 1,
-        userId: 2,
-        words: attemptService.getAttempts(1, 2),
+        words: [],
         buffer: ''
     },
     reducers: {
@@ -20,12 +19,12 @@ export const wordleSlice = createSlice({
             state.buffer += action.payload;
         },
         get: state => {
-            state.words = attemptService.getAttempts(state.chatId, state.userId);
+            state.words = attemptService.getAttempts();
 
         },
         post: (state, action) => {
             if (action.payload.length === 5 && state.words.length < 5) {
-                state.words.push(attemptService.postAttempt(state.chatId, state.userId, action.payload));
+                state.words = attemptService.postAttempt(action.payload);
             } else {
                 console.log('you can\'t post, length=' + action.payload.length);
                 return;
