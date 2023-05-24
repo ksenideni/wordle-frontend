@@ -1,7 +1,7 @@
 import React from 'react';
 import Key from './key';
 import {useDispatch, useSelector} from "react-redux";
-import {addToBuffer, deleteFromBuffer, get, post} from "../../reducers/wordleSlice";
+import {addToBuffer, deleteFromBuffer, fetchWords, get, post} from "../../reducers/wordleSlice";
 import {COLOR_WHITE} from "../../constants/constants";
 import styles from './keyboard.module.css';
 
@@ -11,8 +11,6 @@ export default function KeyBoard() {
     const buffer = useSelector(state => state.wordleGame.buffer);
     const words = useSelector(state => state.wordleGame.words);
     const dispatch = useDispatch();
-
-    dispatch(get())
 
     const charColorMap = createCharColorMap(words);
 
