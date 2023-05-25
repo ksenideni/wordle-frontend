@@ -1,7 +1,7 @@
 import React from 'react';
 import Key from './key';
 import {useDispatch, useSelector} from "react-redux";
-import {addToBuffer, deleteFromBuffer, fetchWords, get, post} from "../../reducers/wordleSlice";
+import {addToBuffer, deleteFromBuffer,postWord} from "../../reducers/wordleSlice";
 import {COLOR_WHITE} from "../../constants/constants";
 import styles from './keyboard.module.css';
 
@@ -91,7 +91,7 @@ function printOnClickFunc(a, buffer, dispatch) {
 
 function enterOnClickFunc(buffer, dispatch) {
     return () => {
-        dispatch(post(buffer));
+        dispatch(postWord(buffer));
     }
 }
 

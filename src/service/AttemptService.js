@@ -19,7 +19,7 @@ export default class AttemptService {
         const chatId = currentURL.searchParams.get('chat_id')
         const userId = currentURL.searchParams.get('user_id')
 
-        const result =  await axios.get(
+        const result = await axios.get(
             this.prefixURL,
             {
                 params: {
@@ -30,13 +30,22 @@ export default class AttemptService {
         return result.data
     }
 
-    postAttempt(word) {
+    static async postAttempt(word) {
         const currentURLString = window.location.href;
         const currentURL = new URL(currentURLString);
         const chatId = currentURL.searchParams.get('chat_id')
         const userId = currentURL.searchParams.get('user_id')
-        this.mockAttempt = {...this.mockAttempt, word}
-        this.mockWords.push(this.mockAttempt)
-        return this.mockWords
+
+        const result = await axios.post(
+            this.prefixURL,
+            {currentWord: word},
+            {
+                params: {
+                    chatId,
+                    userId
+                }
+            }
+        )
+        return result.data
     }
 }
