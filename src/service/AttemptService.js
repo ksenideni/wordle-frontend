@@ -7,9 +7,9 @@ export default class AttemptService {
 
     static prefixURL = this.host + '/wordle/attempts'
 
-    mockAttempt = {word: 'atemp', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY]};
-
     static async getAttempts() {
+        console.log('this.host')
+        console.log(this.host)
         const currentURLString = window.location.href;
         const currentURL = new URL(currentURLString);
         const chatId = currentURL.searchParams.get('chat_id')
