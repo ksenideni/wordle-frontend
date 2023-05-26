@@ -2,14 +2,10 @@ import {COLOR_GREEN, COLOR_GREY, COLOR_YELLOW} from "../constants/constants";
 import axios from "axios";
 
 export default class AttemptService {
-    static host = process.env.WORDLE_BACKEND_HOST
+    static host = process.env.REACT_APP_WORDLE_BACKEND_HOST
     // static host = 'http://localhost:8080'
 
     static prefixURL = this.host + '/wordle/attempts'
-    mockWords = [
-        {word: 'qwert', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_YELLOW]},
-        {word: 'qasdf', colors: [COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY, COLOR_GREEN]},
-    ];
 
     mockAttempt = {word: 'atemp', colors: [COLOR_GREEN, COLOR_GREEN, COLOR_YELLOW, COLOR_GREY, COLOR_GREY]};
 
